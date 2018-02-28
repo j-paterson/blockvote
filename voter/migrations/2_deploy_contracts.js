@@ -1,5 +1,5 @@
-var Greeter = artifacts.require("./Greeter.sol");
+var Voter = artifacts.require("./Voter.sol");
 
 module.exports = function(deployer) {
-    deployer.deploy(Greeter, "I am alive");
+    deployer.deploy(Voter);
 };
