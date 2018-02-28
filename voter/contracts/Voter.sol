@@ -4,12 +4,12 @@ contract Voter {
 
     struct Topic {
         string topicID;
-        // mapping of options to num votes
-        mapping(string => uint) options;
+        uint numUpVotes;
+        uint numDownVotes;
     }
 
     // mapping of user address to mapping of topics that user can vote on
-    mapping(address => mapping(string => uint)) public users;
+    mapping(address => Topic[]) public voterPermissions;
     
     // mapping of topicIDs to Topic structs
     mapping(string => Topic) public topics;
@@ -25,20 +25,11 @@ contract Voter {
         
         // TODO: check valid address, edge cases etc.
 
-        mapping(string => uint) topicOptions;
-
-        // assigning 0 votes to each topic option
-        for (uint i = 0; i < options.length; i++) {
-            topicOptions[options[i]] = 0;
-        }
-
-        // put Topic struct in topics mapping
-        Topic storage t = Topic(topicTitle, topicOptions);
-        topics[topicTitle] = t;
+        topics[topicTitle] = Topic(topicTitle, 0, 0);
 
         // give each eligible voter 1 vote for topicTitle
         for (uint j = 0; j < eligibleVoters.length; j++) {
-            users[eligibleVoters[j]][topicTitle] = 1;
+            voterPermissions[eligibleVoters[j]].push(Topic(topicTitle, 0, 0));
         }
     }
 
