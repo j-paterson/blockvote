@@ -3,16 +3,22 @@ pragma solidity ^0.4.19;
 contract Voter {
 
     struct Topic {
+        address creator;
         string topicID;
         uint numUpVotes;
         uint numDownVotes;
     }
 
+    struct Permission {
+        string topicID;
+        uint numVotes;
+    }
+
     // mapping of user address to mapping of topics that user can vote on
-    mapping(address => Topic[]) public voterPermissions;
+    mapping(address => Permission[]) voterPermissions;
     
     // mapping of topicIDs to Topic structs
-    mapping(string => Topic) public topics;
+    mapping(string => Topic) topics;
 
     function Voter() public {
     }
@@ -21,15 +27,17 @@ contract Voter {
      * Create topic by adding a Topic struct to the topics mapping
      * and giving each eligible voter 1 vote for the current topicTitle.
      */
-    function createTopic(string topicTitle, address[] eligibleVoters, uint voteTime, string[] options) public {
+    function createTopic(string topicTitle, address[] eligibleVoters) public {
         
-        // TODO: check valid address, edge cases etc.
+        // TODO: check valid address, edge cases, add timer.
 
-        topics[topicTitle] = Topic(topicTitle, 0, 0);
+        // create new Topic struct
+        topics[topicTitle] = Topic(msg.sender, topicTitle, 0, 0);
 
         // give each eligible voter 1 vote for topicTitle
         for (uint j = 0; j < eligibleVoters.length; j++) {
-            voterPermissions[eligibleVoters[j]].push(Topic(topicTitle, 0, 0));
+            address a = eligibleVoters[j];
+            voterPermissions[a].push(Permission(topicTitle, 1));
         }
     }
 
@@ -40,15 +48,15 @@ contract Voter {
      * Getter functions:
      */
 
-    function getTopics() view {
+    function getTopics() public view {
         // get all topics of Voter
     }
 
-    function getOptions(string topicID) view {
+    function getOptions(string topicID) public view {
         // get all the voting options for topicID
     }
 
-    function getVotes(string topicID, string option) view {
+    function getVotes(string topicID, string option) public view {
         // get all current votes for option for topicID
     }
 }
