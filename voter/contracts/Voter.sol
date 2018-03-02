@@ -5,9 +5,9 @@ contract Voter {
     struct Topic {
         address creator;
         string topicTitle;
-        string[] options;
+        bytes32[] options;
         uint topicID;
-        mapping(string => uint) optionVotes;
+        mapping(bytes32 => uint) optionVotes;
     }
 
     struct Permission {
@@ -31,7 +31,7 @@ contract Voter {
      * Create topic by adding a Topic struct to the topics mapping
      * and giving each eligible voter 1 vote for the current topicTitle.
      */
-    function createTopic(string topicTitle, string[] options, address[] eligibleVoters) public {
+    function createTopic(string topicTitle, bytes32[] options, address[] eligibleVoters) public {
 
         // TODO: check valid address, edge cases, add timer.
 
@@ -53,7 +53,7 @@ contract Voter {
      * check the timeFrame to see if voting is over
      * increment option vote amount for that topic
      */
-    function vote(uint topicID, string option) public {
+    function vote(uint topicID, bytes32 option) public {
       for(uint i = 0; i < voterPermissions[msg.sender].length; i++){
         if((voterPermissions[msg.sender][i].topicID == topicID) && (voterPermissions[msg.sender][i].numVotes > 0)){
           topics[topicID].optionVotes[option]+=1;
@@ -69,11 +69,11 @@ contract Voter {
         // get all topics of Voter
     }
 
-    function getOptions(string topicID) public view {
+    function getOptions(uint topicID) public view {
         // get all the voting options for topicID
     }
 
-    function getVotes(string topicID, string option) public view {
+    function getVotes(string topicID, bytes32 option) public view {
         // get all current votes for option for topicID
     }
 }
