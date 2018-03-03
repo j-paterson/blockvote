@@ -65,15 +65,11 @@ contract Voter {
      * Getter functions:
      */
 
-    function getTopics() public view {
-        // get all topics of Voter
+    function getOptionsForTopic(uint topicID) public view returns (bytes32[]){
+        return topics[topicID].options;
     }
 
-    function getOptions(uint topicID) public view {
-        // get all the voting options for topicID
-    }
-
-    function getVotes(string topicID, bytes32 option) public view {
-        // get all current votes for option for topicID
+    function getVotesForTopicOption(uint topicID, bytes32 option) public view returns (uint) {
+        return topics[topicID].optionVotes[option];
     }
 }
